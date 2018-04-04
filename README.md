@@ -68,7 +68,7 @@ cc([1, 2, 3])
 
 ```js
 cc([1, 2, 3])
-  .each(v => console.log(v+1)); // 2, 3, 4
+  .each(v => console.log(v + 1)); // 2, 3, 4
 // [1, 2, 3]
 ```
 

@@ -1,7 +1,6 @@
 # compose-chain
 
 ```js
-//API
 const cc = require('compose-chain');
 
 const result = cc([1, 2, 3])
@@ -14,7 +13,7 @@ In normal js this would loop over the array 4 times, once for each operation.
 Using `compose-chain` this will loop over the array once.
 
 ```js
-//The above is equevelant to this
+//This is equevelant to the above
 
 [1, 2, 3].reduce((res, v) => {
   v = v * v;
@@ -27,8 +26,7 @@ Using `compose-chain` this will loop over the array once.
 
 You can also compose functions:
 
-```
-
+```js
 const composition = cc
   .map(v => v * v)
   .map(v => v + 1)

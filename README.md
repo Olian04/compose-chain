@@ -44,7 +44,7 @@ const result = composition([1, 2, 3]);
 
 ```js
 cc([1, 2, 3])
-  .map(v => v*2);
+  .map(v => v * 2);
 // [2, 4, 6]
 ```
 
@@ -60,7 +60,7 @@ cc([1, 2, 3])
 
 ```js
 cc([1, 2, 3])
-  .reduce((res, v) => res +v, 0);
+  .reduce((res, v) => res + v, 0);
 // 6
 ```
 

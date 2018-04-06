@@ -1,5 +1,3 @@
-import { Exception } from "handlebars";
-
 export interface IComposer {
     compose(): (iter: any[]) => any,
     map(cb: (value: any) => any): IComposer;

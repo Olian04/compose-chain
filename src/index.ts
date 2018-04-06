@@ -18,6 +18,9 @@ export class Composer implements IComposer {
         this.postComposition = 'return [...res, v];}, []);';
     }
 
+    /**
+     * The way compose works is heavily inspired by the way webpack works in dev mode.
+     */
     public compose() {
         // cb is an array of references to the callback methods
         // this is needed because a callback might need the context where it was defined

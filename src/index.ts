@@ -63,7 +63,7 @@ export class Composer implements IComposer {
 
     public reduce(cb: (previous: any, next: any) => any, initial) {
         if (this.isStatic) return new Composer(false).reduce(cb, initial);
-        throw new Exception('Reduce is not yet implemented!');
+        throw new Error('Reduce is not yet implemented!');
 
         this.composition.push({
             signature: `cb[${this.composition.length}](v);`,

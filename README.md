@@ -54,20 +54,20 @@ cc([1, 2, 3])
 // [2, 3]
 ```
 
-## `.reduce( (res, v) => any , initial)`
-
-```js
-cc([1, 2, 3])
-  .reduce((res, v) => res + v, 0);
-// 6
-```
-
 ## `.each( v => void )`
 
 ```js
 cc([1, 2, 3])
   .each(v => console.log(v + 1)); // 2, 3, 4
 // [1, 2, 3]
+```
+
+## `.reduce( (res, v) => any , initial)`
+
+```js
+cc([1, 2, 3])
+  .reduce((res, v) => res + v, 0);
+// 6
 ```
 
 ## `.sort( (a,b) => number )`

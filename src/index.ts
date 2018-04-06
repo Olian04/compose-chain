@@ -1,28 +1,80 @@
+import { Exception } from "handlebars";
 
-
-type Iter<T> = Array<T>;
-interface IComposer<T, R> {
-    map<U>( callback: (value: T) => U ): R;
-}
-interface ICallableComposer<T> extends IComposer<T, ICallableComposer<T>> {
-    (iter: Iter<T>): any;
+export interface IComposer {
+    compose(): (iter: any[]) => any,
+    map(cb: (value: any) => any): IComposer;
 }
 
-function composer<T>(): ICallableComposer<T> {
-    const composition: Function[] = [];
+export class Composer implements IComposer {
+    private preComposition: string;
+    private postComposition: string;
+    private composition: {signature: string, callback: Function}[];
+    private isStatic: boolean;
 
-    //@ts-ignore
-    const co: ICallableComposer = function<T>(iter: Iter<T>): any {
-        return iter.map(v => 
-            composition.reduce((v, f) => f(v), v)
+    constructor(isStatic: boolean) {
+        this.isStatic = isStatic;
+        this.composition= [];
+        this.preComposition = 'iter.reduce((res, v) => {';
+        this.postComposition = 'return [...res, v];}, []);';
+    }
+
+    public compose() {
+        // cb is an array of references to the callback methods
+        // this is needed because a callback might need the context where it was defined
+        // ex: let r = []; cc.each(v => r.push(v));
+        const cb = this.composition.map(v => v.callback);
+        return (iter: any[]) => eval(
+            this.preComposition 
+            + this.composition.map(v => v.signature).join('')
+            + this.postComposition
         );
     }
-    co.map = cb => {
-        composition.push(cb);
-        return co;
-    };
-    return co;
+    
+    public map(cb: (value: any) => any) {
+        if (this.isStatic) return new Composer(false).map(cb);
+
+        this.composition.push({
+            signature: `v = cb[${this.composition.length}](v);`,
+            callback: cb
+        });
+        return this;
+    }
+
+    public filter(cb: (value: any) => any) {
+        if (this.isStatic) return new Composer(false).filter(cb);
+
+        this.composition.push({
+            signature: `if (cb[${this.composition.length}](v)) return res;`,
+            callback: cb
+        });
+        return this;
+    }
+
+    public each(cb: (value: any) => any) {
+        if (this.isStatic) return new Composer(false).each(cb);
+
+        this.composition.push({
+            signature: `cb[${this.composition.length}](v);`,
+            callback: cb
+        });
+        return this;
+    }
+
+    public reduce(cb: (previous: any, next: any) => any, initial) {
+        if (this.isStatic) return new Composer(false).reduce(cb, initial);
+        throw new Exception('Reduce is not yet implemented!');
+
+        this.composition.push({
+            signature: `cb[${this.composition.length}](v);`,
+            callback: cb
+        });
+        return this;
+    }
+
+    
 }
 
-composer<Number>()
-    .map(v => v * 2);
+export const cc = new Composer(true);
+
+export default cc;
+

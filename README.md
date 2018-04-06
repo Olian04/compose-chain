@@ -3,37 +3,27 @@
 ```js
 const cc = require('compose-chain');
 
-const result = cc([1, 2, 3])
+const composition = cc
   .map(v => v * v)
   .map(v => v + 1)
   .filter(v => v % 2 === 0)
-  .reduce((res, v) => res + v,0);
+  .compose();
+
+const result = composition([1, 2, 3]);
 ```
-In normal js this would loop over the array 4 times, once for each operation.
+
+In normal js this would loop over the array 3 times, once for each operation.
 Using `compose-chain` this will loop over the array once.
 
 ```js
-//This is equevelant to the above
+//This is equivalent to the above
 
 [1, 2, 3].reduce((res, v) => {
   v = v * v;
   v = v + 1;
   if (v % 2 === 0) return res;
-  v = v * v;
   return [...res, v];
 }, []);
-```
-
-You can also compose functions:
-
-```js
-const composition = cc
-  .map(v => v * v)
-  .map(v => v + 1)
-  .filter(v => v % 2 === 0)
-  .reduce((res, v) => res + v, 0);
-  
-const result = composition([1, 2, 3]);
 ```
 
 # API
